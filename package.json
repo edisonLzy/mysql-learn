@@ -12,10 +12,11 @@
       "mysql": "^2.14.1",
       "mysql2": "^3.5.0",
       "reflect-metadata": "^0.1.13",
+      "ts-node-dev": "^2.0.0",
       "typeorm": "0.3.17"
    },
    "scripts": {
-      "start": "ts-node src/index.ts",
+      "start": "ts-node-dev src/index.ts",
       "typeorm": "typeorm-ts-node-commonjs"
    }
 }

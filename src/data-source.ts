@@ -15,7 +15,7 @@ export const AppDataSource = new DataSource({
     // 比如当 database没有 User表的时候,会自动创建 User表
     synchronize: true,
     // 是否打印生成的 sql 语句
-    logging: false,
+    logging: ['query', 'error'],
     // 指定与数据库表对应的实体类
     entities: [User],
     migrations: [],
