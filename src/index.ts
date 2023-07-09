@@ -5,51 +5,47 @@ import { User } from "./entity/User"
 AppDataSource.initialize().then(async () => {
 
     console.log("Inserting a new user into the database...")
-    // 批量插入或修改
-    // save 方法会先查询一次数据库来确定是插入还是修改
+
     await AppDataSource.manager.save(User, [
-        { id: 2 ,firstName: 'ccc111', lastName: 'ccc', age: 21},
-        { id: 3 ,firstName: 'ddd222', lastName: 'ddd', age: 22},
-        { id: 4, firstName: 'eee333', lastName: 'eee', age: 23},
-        { id: 5, firstName: 'eee444', lastName: 'jjj', age: 20},
+        { id: 2, firstName: 'ccc111', lastName: 'ccc', age: 21 },
+        { id: 3, firstName: 'ddd222', lastName: 'ddd', age: 22 },
+        { id: 4, firstName: 'eee333', lastName: 'eee', age: 23 },
+        { id: 5, firstName: 'eee444', lastName: 'jjj', age: 20 },
     ])
-    // 删除/批量删除 直接传入 id
-    await AppDataSource.manager.delete(User, { id: 1 });
-    await AppDataSource.manager.delete(User, [2,3]);
-    // remove 直接传入 entity实例
-    /** await AppDataSource.manager.delete(User, user);  */
 
-    // 查询 / 条件查询 / 查询一条数据 / 执行原生sql
-    const users = await AppDataSource.manager.find(User)
-    console.log("Loaded users: ", users)
-    const usersByAge = await AppDataSource.manager.findBy(User, {
-        age: 20
-    });
-    console.log('findBy age',usersByAge);
-    const user = await await AppDataSource.manager.findOne(User, {
-        select: {
-            firstName: true,
-            age: true
-        },
+    // queryBuilder 通常用于 多个 Entity 的关联查询
+    const queryBuilder = await AppDataSource.manager.createQueryBuilder();
+
+    const user = await queryBuilder.select("user")
+        .from(User, "user")
+        // :age 为参数
+        .where("user.age = :age", { age: 21 })
+        .getOne();
+
+    console.log(user);
+
+    // 事务
+    await AppDataSource.manager.transaction(async manager => {
+
+        await manager.save(User, { id: 6, firstName: 'fff', lastName: 'fff', age: 24 })
+        const user = await manager.findOne(User, {
+            where: {
+               age: 24
+            }
+        })
+        console.log(user);
+        
+    })
+
+    // getRepository 简化 用于 单个 Entity 的查询
+    // 即后续方法 不用指定 Entity了
+    const usersInUser = await AppDataSource.manager.getRepository(User).find({
         where: {
-            // 指定集合查询
-            id: In([4])
-        },
-        order: {
-            age: 'ASC'
+            age: In([21, 24])
         }
-    });
-    console.log('findOne',user);
-    const usersSql = await AppDataSource.manager.query('select * from user where age in(?, ?)', [21, 23]);
-    console.log('sql',usersSql);
-
-    // 计数: count / findAndCount
-    const usersCount = await AppDataSource.manager.count(User);
-    console.log('count',usersCount);
-    const usersCountByAge = await AppDataSource.manager.countBy(User, {
-        age: 20
-    });
-    console.log('usersCountByAge',usersCountByAge);
+    })
+    console.log(usersInUser);
     
+
 
 }).catch(error => console.log(error))
