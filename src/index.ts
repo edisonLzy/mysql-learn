@@ -5,10 +5,13 @@ AppDataSource.initialize().then(async () => {
 
     console.log("Inserting a new user into the database...")
     const user = new User()
+    // 指定了 id 就表示修改 
+    user.id = 1;
     user.firstName = "Timber"
     user.lastName = "Saw"
-    user.age = 25
+    user.age = 20
     await AppDataSource.manager.save(user)
+
     console.log("Saved a new user with id: " + user.id)
 
     console.log("Loading users from the database...")
