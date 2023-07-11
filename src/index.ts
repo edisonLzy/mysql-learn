@@ -1,24 +1,35 @@
 import { AppDataSource } from "./data-source"
-import { Department } from "./entity/Department";
-import { Employee } from "./entity/Employee";
+import { Article } from "./entity/Article";
+import { Tag } from "./entity/Tag";
 
 AppDataSource.initialize().then(async () => {
-    
-    const d1 = new Department();
-    d1.name = '技术部';
+    const a1 = new Article();
+    a1.title = 'aaaa';
+    a1.content = 'aaaaaaaaaa';
 
-    const e1 = new Employee();
-    e1.name = '张三';
-    e1.department = d1;
+    const a2 = new Article();
+    a2.title = 'bbbbbb';
+    a2.content = 'bbbbbbbbbb';
 
-    const e2 = new Employee();
-    e2.name = '李四';
-    e2.department = d1;
+    const t1 = new Tag();
+    t1.name = 'ttt1111';
 
-    const e3 = new Employee();
-    e3.name = '王五';
-    e3.department = d1;
+    const t2 = new Tag();
+    t2.name = 'ttt2222';
 
-    AppDataSource.manager.save(Department, d1);
-    AppDataSource.manager.save(Employee, [e1, e2, e3]);
+    const t3 = new Tag();
+    t3.name = 'ttt33333';
+
+    a1.tags = [t1,t2];
+    a2.tags = [t1,t2,t3];
+
+    const entityManager = AppDataSource.manager;
+
+    await entityManager.save(t1);
+    await entityManager.save(t2);
+    await entityManager.save(t3);
+
+    await entityManager.save(a1);
+    await entityManager.save(a2);
+   
 }).catch(error => console.log(error))
