@@ -1,5 +1,7 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
+import { Department } from "./entity/Department"
+import { Employee } from "./entity/Employee"
 import { IdCard } from "./entity/IdCard"
 import { User } from "./entity/User"
 
@@ -18,12 +20,12 @@ export const AppDataSource = new DataSource({
     // 是否打印生成的 sql 语句
     logging: true,
     // 指定与数据库表对应的实体类
-    entities: [User, IdCard],
+    entities: [User, IdCard, Department, Employee],
     migrations: [],
     // Entity 生命周期的订阅者，比如 insert、update、remove 前后，可以加入一些逻辑
     subscribers: [],
     // 指定连接池的最大连接数
     poolSize: 10,
     connectorPackage: 'mysql2',
-    
+
 })
