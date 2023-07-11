@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm"
+import { IdCard } from "./IdCard"
 
 // mysql's schema -> ORM's entity
 @Entity({
@@ -27,5 +28,8 @@ export class User {
     })
     // 默认 number 会映射成 INT 类型
     age: number
+
+    @OneToOne(()=>IdCard, idCard => idCard.user)
+    idCard: IdCard
 
 }
