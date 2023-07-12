@@ -1,23 +1,16 @@
-import { createClient } from 'redis'
+import { Redis } from 'ioredis'
 
-const client = createClient({
-    socket: {
-        host: 'localhost',
-        port: 6379
-    }
-});
+const redis = new Redis()
 
+console.log(await redis.keys('*'));
 
-await client.connect();
+console.log(await redis.lrange('list3',0,-1));
 
-await client.hSet('hSet', '111', 'value111');
-await client.hSet('hSet', '222', 'value222');
-await client.hSet('hSet', '333', 'value333');
+// redis包中的方法只能push字符串
+// ioredis 可以是数字
+redis.lpush('list3',1,2,3,4,5,6,7,8,9,10)
 
-await client.LPUSH('list3', "1")
-await client.LPUSH('list3', "2")
-
-console.log(await client.lRange('list3', 0, -1));
+console.log(await redis.lrange('list3',0,-1));
 
 
-await client.disconnect();
+console.log(await redis.llen('list3'));
