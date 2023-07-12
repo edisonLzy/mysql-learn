@@ -1,0 +1,20 @@
+{
+  "name": "mysql-learn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "evan",
+  "license": "ISC",
+  "dependencies": {
+    "ioredis": "^5.3.2",
+    "redis": "^4.6.7"
+  },
+  "devDependencies": {
+    "tsx": "^3.12.7"
+  }
+}
